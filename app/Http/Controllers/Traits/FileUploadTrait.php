@@ -57,10 +57,7 @@ trait FileUploadTrait
                     // Check file width
                     $filename = time() . '-' . $request->file($key)->getClientOriginalName();
                     $file     = $request->file($key); 
-
                     $image    = Image::make($file);
-
-    
 
                     Image::make($file)->resize(50, 50)->save($thumbPath . '/' . $filename);
 
@@ -80,7 +77,7 @@ trait FileUploadTrait
                     $image->save($uploadPath . '/' . $filename);
                     $finalRequest = new Request(array_merge($finalRequest->all(), [$key => $filename]));
                 } else {
-                    $filename = time() . '-hokey-pokey-' . $request->file($key)->getClientOriginalName();
+                    $filename = time() . '-' . $request->file($key)->getClientOriginalName();
                     $request->file($key)->move($uploadPath, $filename);
                     $finalRequest = new Request(array_merge($finalRequest->all(), [$key => $filename]));
                 }

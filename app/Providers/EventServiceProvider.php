@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'Spatie\MediaLibrary\Events\MediaHasBeenAdded' => [
+            'App\Listeners\MediaLogger',
+        ],
+        'Spatie\MediaLibrary\Events\ConversionHasBeenCompleted' => [
+            'App\Listeners\ConversionLogger',
+        ],
     ];
 
     /**

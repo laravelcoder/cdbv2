@@ -6,7 +6,7 @@
     @can('clip_create')
     <p>
         <a href="{{ route('admin.clips.create') }}" class="btn btn-success">@lang('global.app_add_new')</a>
-        
+
     </p>
     @endcan
 
@@ -16,7 +16,7 @@
             <li><a href="{{ route('admin.clips.index') }}?show_deleted=1" style="{{ request('show_deleted') == 1 ? 'font-weight: 700' : '' }}">@lang('global.app_trash')</a></li>
         </ul>
     </p>
-    
+
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -40,7 +40,7 @@
                         @endif
                     </tr>
                 </thead>
-                
+
                 <tbody>
                     @if (count($clips) > 0)
                         @foreach ($clips as $clip)
@@ -49,16 +49,20 @@
                                     @if ( request('show_deleted') != 1 )<td></td>@endif
                                 @endcan
 
-                                <td field-key='videos'> @foreach($clip->getMedia('videos') as $media)
+                                <td field-key='videos'>
+                                    @foreach($clip->getMedia('videos') as $media)
+                                        <p class="form-group">
+                                            <a href="{{ $media->getUrl() }}" target="_blank">{{ $media->name }} ({{ $media->size }} KB)</a>
+                                        </p>
+                                    @endforeach
+                                </td>
+                                <td field-key='images'>
+                                    @foreach($clip->getMedia('images') as $media)
                                 <p class="form-group">
                                     <a href="{{ $media->getUrl() }}" target="_blank">{{ $media->name }} ({{ $media->size }} KB)</a>
+
                                 </p>
-                            @endforeach</td>
-                                <td field-key='images'> @foreach($clip->getMedia('images') as $media)
-                                <p class="form-group">
-                                    <a href="{{ $media->getUrl() }}" target="_blank">{{ $media->name }} ({{ $media->size }} KB)</a>
-                                </p>
-                            @endforeach</td>
+                                @endforeach</td>
                                 @if( request('show_deleted') == 1 )
                                 <td>
                                     {!! Form::open(array(
@@ -108,7 +112,7 @@
     </div>
 @stop
 
-@section('javascript') 
+@section('javascript')
     <script>
         @can('clip_delete')
             @if ( request('show_deleted') != 1 ) window.route_mass_crud_entries_destroy = '{{ route('admin.clips.mass_destroy') }}'; @endif

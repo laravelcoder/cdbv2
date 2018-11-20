@@ -47,7 +47,7 @@ return [
             'driver' => 'local',
             'root'   => storage_path('app'),
         ],
-        
+
         'media' => [
             'driver'     => 'local',
             'root'       => public_path('uploads'),
@@ -107,6 +107,20 @@ return [
             'driver' => 'local',
             'root'   => public_path('uploads/icons'),
             'url'        => env('APP_URL') . '/uploads/icons',
+            'visibility' => 'public',
+        ],
+
+        'streamable_videos' => [
+            'driver' => 'local',
+            'root'   => public_path('uploads/clips'),
+            'url'        => env('APP_URL') . '/uploads/clips',
+            'visibility' => 'public',
+        ],
+
+        'downloadable_videos' => [
+            'driver' => 'local',
+            'root'   => public_path('uploads/clips'),
+            'url'        => env('APP_URL') . '/uploads/clips',
             'visibility' => 'public',
         ],
 

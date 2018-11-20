@@ -39,24 +39,48 @@ class SpatieMediaController extends Controller
         $addedFiles = [];
         foreach ($files as $file) {
             try {
-                $extension = $file->getClientOriginalExtension();
                 $filename = $file->getClientOriginalName();
-                $filename = preg_replace('/--+/', '_', $filename);
-                $filename = str_replace(array('-',',','&'),'_', $filename);
+                if(preg_match('/^.*\.(mp4|mov|mpg|mpeg|wmv|mkv)$/i', $filename)){
+                        Log::debug("VIDEO IDENTIFIED:");
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = $file->getClientOriginalName();
+                    $filename = preg_replace('/--+/', '_', $filename);
+                    $filename = str_replace(array('-',',','&'),'_', $filename);
 
-                $basename = substr($filename, 0, strrpos($filename, "."));
-                $basename = Normalize::titleCase($basename);
-                Log::debug("BASENAME: " .$basename);
-                $filename = str_slug($basename, '_'). '.'. $extension;
-                Log::debug("FILENAME: " .$filename);
+                    $basename = substr($filename, 0, strrpos($filename, "."));
+                    $basename = Normalize::titleCase($basename);
+                    Log::debug("BASENAME: " .$basename);
+                    $filename = str_slug($basename, '_'). '.'. $extension;
+                    Log::debug("FILENAME: " .$filename);
 
-                // Log::debug($model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->toMediaCollection($request->input('bucket')));
-                $model->exists     = true;
-                $media             = $model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->withResponsiveImages()->toMediaCollection($request->input('bucket'));
-                
+                    // Log::debug($model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->toMediaCollection($request->input('bucket')));
+                    $model->exists     = true;
+                    $media             = $model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->withResponsiveImages()->toMediaCollection($request->input('bucket'));
+                    
 
-                $addedFiles[]      = $media;
-                Log::debug($addedFiles);
+                    $addedFiles[]      = $media;
+                    Log::debug($addedFiles);
+                }elseif(preg_match('/^.*\.(png|jpg|jpeg)$/i', $filename)){
+                    Log::debug("IMAGE IDENTIFIED:");
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = $file->getClientOriginalName();
+                    $filename = preg_replace('/--+/', '_', $filename);
+                    $filename = str_replace(array('-',',','&'),'_', $filename);
+
+                    $basename = substr($filename, 0, strrpos($filename, "."));
+                    $basename = Normalize::titleCase($basename);
+                    Log::debug("BASENAME: " .$basename);
+                    $filename = str_slug($basename, '_'). '.'. $extension;
+                    Log::debug("FILENAME: " .$filename);
+
+                    // Log::debug($model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->toMediaCollection($request->input('bucket')));
+                    $model->exists     = true;
+                    $media             = $model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->withResponsiveImages()->toMediaCollection($request->input('bucket'));
+                    
+
+                    $addedFiles[]      = $media;
+                    Log::debug($addedFiles);
+                }
             } catch (\Exception $e) {
                 abort(500, 'Could not upload your file');
             }

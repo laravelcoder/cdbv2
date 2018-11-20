@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Clip;
+use App\Jobs\ConvertVideoForDownloading;
+use App\Jobs\ConvertVideoForStreaming;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
@@ -26,6 +28,8 @@ class ClipsController extends Controller
         }
 
 
+
+
         if (request('show_deleted') == 1) {
             if (! Gate::allows('clip_delete')) {
                 return abort(401);
@@ -33,9 +37,14 @@ class ClipsController extends Controller
             $clips = Clip::onlyTrashed()->get();
         } else {
             $clips = Clip::all();
+
         }
 
-        return view('admin.clips.index', compact('clips'));
+
+//        $mediaItems = $clips->getMedia('images');
+
+
+        return view('admin.clips.index', compact('clips', 'mediaItems'));
     }
 
     /**
@@ -48,6 +57,7 @@ class ClipsController extends Controller
         if (! Gate::allows('clip_create')) {
             return abort(401);
         }
+
         return view('admin.clips.create');
     }
 
@@ -62,9 +72,12 @@ class ClipsController extends Controller
         if (! Gate::allows('clip_create')) {
             return abort(401);
         }
+
         $request = $this->saveFiles($request);
+
         $clip = Clip::create($request->all());
 
+//        dd($clip);
 
         foreach ($request->input('videos_id', []) as $index => $id) {
             $model          = config('medialibrary.media_model');
@@ -79,6 +92,13 @@ class ClipsController extends Controller
             $file->model_id = $clip->id;
             $file->save();
         }
+
+        $this->clip
+            ->addMedia($request->file)
+            ->toMediaLibrary('thumbs');
+
+//        $this->dispatch(new ConvertVideoForDownloading($clip));
+//        $this->dispatch(new ConvertVideoForStreaming($clip));
 
 
         return redirect()->route('admin.clips.index');
