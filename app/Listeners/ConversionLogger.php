@@ -7,6 +7,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\MediaLibrary\Events\ConversionHasBeenCompleted;
 use Spatie\MediaLibrary\Conversion\Conversion;
+use Spatie\MediaLibrary\Events\MediaHasBeenAdded;
+use Spatie\MediaLibrary\Helpers\File as MediaLibraryFileHelper;
 
 class ConversionLogger
 {
@@ -28,8 +30,9 @@ class ConversionLogger
      */
     public function handle(ConversionHasBeenCompleted $event)
     {
+//        \Log::info('MEDIA CONVERSION COMPLETED EVENT FIRED');
         $media = $event->media;
         $path = $media->getPath();
-        Log::info("Conversions {$path} have been completed media {$media->id}");
+        \Log::info("CONVERSIONS have been completed on > {$media->name} < ad.");
     }
 }

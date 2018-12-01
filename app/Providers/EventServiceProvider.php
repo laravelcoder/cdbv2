@@ -20,10 +20,14 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Spatie\MediaLibrary\Events\MediaHasBeenAdded' => [
             'App\Listeners\MediaLogger',
+//            'App\Listeners\MediaVideoConverterListener',
+
         ],
         'Spatie\MediaLibrary\Events\ConversionHasBeenCompleted' => [
             'App\Listeners\ConversionLogger',
+            'App\Listeners\ConvertToCaiConversionListener'
         ],
+
     ];
 
     /**

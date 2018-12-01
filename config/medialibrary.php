@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\PathGeneratorController;
+
 return [
 
     /*
@@ -79,7 +81,7 @@ return [
     /*
      * The class that contains the strategy for determining a media file's path.
      */
-    'path_generator' => null,
+    'path_generator' => PathGeneratorController::class,
 
     /*
      * Medialibrary will try to optimize all converted images by removing
@@ -124,6 +126,8 @@ return [
      * Should be either `gd` or `imagick`.
      */
     'image_driver' => 'gd',
+
+    'audio_codec'  => 'libvo_aacenc',
 
     /*
      * FFMPEG & FFProbe binaries paths, only used if you try to generate video

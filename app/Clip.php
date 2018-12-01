@@ -18,12 +18,13 @@ class Clip extends Model implements HasMedia
 {
     use SoftDeletes, HasMediaTrait;
 
-    protected $fillable = ['videos', 'images', 'converted_for_downloading_at', 'converted_for_streaming_at'];
+    protected $fillable = ['videos', 'images', 'converted_for_downloading_at', 'converted_for_streaming_at','converted_to_cai'];
     protected $hidden = [];
 
     protected $dates = [
         'converted_for_downloading_at',
         'converted_for_streaming_at',
+        'converted_to_cai',
     ];
 
 
@@ -31,10 +32,11 @@ class Clip extends Model implements HasMedia
 	{
 		$this->addMediaCollection('videos')
 		    ->acceptsFile(function (File $file) {return $file->mimeType === 'video/mp4'; })
-		    ->useDisk('videos');
+		    ->useDisk('videos')
+            ->singleFile();
 
 		$this->addMediaCollection('images')
-			->acceptsFile(function (File $file) {return $file->mimeType === 'image/jpeg'; })
+			->acceptsFile(function (File $file) {return $file->mimeType === 'image/jpeg' || $file->mimeType === 'image/png'; })
 			->useDisk('images');
 
 
@@ -43,58 +45,34 @@ class Clip extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null)
     {
 
-		$this->addMediaConversion('screenshot-5sec')
-             ->width(368)
-             ->height(232)
-             ->sharpen(10)
-             ->format('png')
-            ->extractVideoFrameAtSecond(10)
+// 1.5862068965517 : 1
 
-		     ->performOnCollections('videos');
+        // $this->addMediaConversion('screenshot-5sec')->extractVideoFrameAtSecond(5)->performOnCollections('videos')->width(368)->height(232)->sharpen(10)->nonQueued()->format('png');
+        // $this->addMediaConversion('screenshot-10sec')->extractVideoFrameAtSecond(10)->performOnCollections('videos')->width(368)->height(232)->sharpen(10)->nonQueued()->format('png');
+        // $this->addMediaConversion('screenshot-15sec')->extractVideoFrameAtSecond(15)->performOnCollections('videos')->width(368)->height(232)->sharpen(10)->nonQueued()->format('png');
+        // $this->addMediaConversion('screenshot-20sec')->extractVideoFrameAtSecond(20)->performOnCollections('videos')->width(368)->height(232)->sharpen(10)->nonQueued()->format('png');
+        // $this->addMediaConversion('screenshot-25sec')->extractVideoFrameAtSecond(25)->performOnCollections('videos')->width(368)->height(232)->sharpen(10)->nonQueued()->format('png');
 
-        $this->addMediaConversion('screenshot-10sec')
-//             ->width(368)
-//             ->height(232)
-            ->extractVideoFrameAtSecond(10)->nonQueued()
-            ->sharpen(10)
-            ->format('png')
-            ->watermark('watermark.png')
-            ->watermarkOpacity(50)
+        $this->addMediaConversion('screenshot-5sec')->extractVideoFrameAtSecond(5)->performOnCollections('videos')->sharpen(10)->nonQueued()->format('png');
+        $this->addMediaConversion('screenshot-10sec')->extractVideoFrameAtSecond(10)->performOnCollections('videos')->sharpen(10)->nonQueued()->format('png');
+        $this->addMediaConversion('screenshot-15sec')->extractVideoFrameAtSecond(15)->performOnCollections('videos')->sharpen(10)->nonQueued()->format('png');
+        $this->addMediaConversion('screenshot-20sec')->extractVideoFrameAtSecond(20)->performOnCollections('videos')->sharpen(10)->nonQueued()->format('png');
+        $this->addMediaConversion('screenshot-25sec')->extractVideoFrameAtSecond(25)->performOnCollections('videos')->sharpen(10)->nonQueued()->format('png');
 
-            ->optimize()
-            // ->useDisk('images')
-            ->performOnCollections('videos');
-
-        $this->addMediaConversion('screenshot-20sec')
-//            ->width(368)
-//            ->height(232)
-            ->extractVideoFrameAtSecond(20)->nonQueued()
-            ->sharpen(10)
-            ->format('png')
-            ->optimize()
-            ->performOnCollections('videos');
-
-        $this->addMediaConversion('screenshot-25sec')
-//            ->width(368)
-//            ->height(232)
-            ->extractVideoFrameAtSecond(25)->nonQueued()
-            ->sharpen(10)
-            ->format('png')
-            ->optimize()
-            ->performOnCollections('videos');
-
-        $this
-            ->addMediaConversion('thumbs')
+        $this->addMediaConversion('thumbs')
         	->performOnCollections('images')
             ->greyscale()
-            ->sharpen(10)->nonQueued()
+            ->sharpen(10)
+            ->nonQueued()
             ->format('png');
             //->withResponsiveImages()
 
 
         $this->addMediaConversion('old-picture')
               ->sepia()
-              ->performOnCollections('images')->nonQueued()
+              ->performOnCollections('images')
+              ->sharpen(10)
+//              ->nonQueued()
               ->border(10, 'black', Manipulations::BORDER_OVERLAY);
     }
 //    public function registerMediaConversions(Media $media = null)

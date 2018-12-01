@@ -31,9 +31,10 @@ class MediaLogger
     {
         $media = $event->media;
         $path = $media->getPath();
-        Log::info("file {$path} has been saved for media {$media->id}");
+        \Log::info("MEDIA:: {$media->id} {$media->name} PATH:: {$path} ");
+        \Log::info('MEDIA ADDED EVENT');
     }
 
 
 
-} 
+}

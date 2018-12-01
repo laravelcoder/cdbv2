@@ -11,6 +11,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreClipsRequest;
 use App\Http\Requests\Admin\UpdateClipsRequest;
 use App\Http\Controllers\Traits\FileUploadTrait;
+use FFMpeg\Coordinate\TimeCode;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\File;
+use Spatie\MediaLibrary\Models\Media;
+use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\Log;
 
 class ClipsController extends Controller
 {
@@ -27,9 +34,6 @@ class ClipsController extends Controller
             return abort(401);
         }
 
-
-
-
         if (request('show_deleted') == 1) {
             if (! Gate::allows('clip_delete')) {
                 return abort(401);
@@ -40,11 +44,13 @@ class ClipsController extends Controller
 
         }
 
+        // $videoimages = $clips->getMedia('videos');
+
 
 //        $mediaItems = $clips->getMedia('images');
 
 
-        return view('admin.clips.index', compact('clips', 'mediaItems'));
+        return view('admin.clips.index', compact('clips', 'videoimages'));
     }
 
     /**
@@ -64,7 +70,7 @@ class ClipsController extends Controller
     /**
      * Store a newly created Clip in storage.
      *
-     * @param  \App\Http\Requests\StoreClipsRequest  $request
+     * @param \App\Http\Requests\Admin\StoreClipsRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreClipsRequest $request)
@@ -77,7 +83,6 @@ class ClipsController extends Controller
 
         $clip = Clip::create($request->all());
 
-//        dd($clip);
 
         foreach ($request->input('videos_id', []) as $index => $id) {
             $model          = config('medialibrary.media_model');
@@ -93,9 +98,6 @@ class ClipsController extends Controller
             $file->save();
         }
 
-        $this->clip
-            ->addMedia($request->file)
-            ->toMediaLibrary('thumbs');
 
 //        $this->dispatch(new ConvertVideoForDownloading($clip));
 //        $this->dispatch(new ConvertVideoForStreaming($clip));
@@ -124,8 +126,8 @@ class ClipsController extends Controller
     /**
      * Update Clip in storage.
      *
-     * @param  \App\Http\Requests\UpdateClipsRequest  $request
-     * @param  int  $id
+     * @param \App\Http\Requests\Admin\UpdateClipsRequest $request
+     * @param  int                                        $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateClipsRequest $request, $id)

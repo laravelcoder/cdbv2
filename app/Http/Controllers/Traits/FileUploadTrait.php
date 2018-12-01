@@ -11,7 +11,7 @@ use FFMpeg;
 use FFMpeg\FFProbe;
 use File;
 use Carbon\Carbon;
-// use Illuminate\Http\File;
+
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
@@ -30,6 +30,8 @@ trait FileUploadTrait
      */
     public function saveFiles(Request $request)
     {
+
+        Log::info("FILEUPLOADTRAIT::START");
 
         if (! file_exists(public_path('uploads'))) { File::makeDirectory(public_path('uploads'),0777, true);}
         if (! file_exists(public_path('uploads/icons'))) { File::makeDirectory(public_path('uploads/icons'),0777, true);}
@@ -56,7 +58,7 @@ trait FileUploadTrait
                 if ($request->has($key . '_max_width') && $request->has($key . '_max_height')) {
                     // Check file width
                     $filename = time() . '-' . $request->file($key)->getClientOriginalName();
-                    $file     = $request->file($key); 
+                    $file     = $request->file($key);
                     $image    = Image::make($file);
 
                     Image::make($file)->resize(50, 50)->save($thumbPath . '/' . $filename);
@@ -75,15 +77,31 @@ trait FileUploadTrait
                         });
                     }
                     $image->save($uploadPath . '/' . $filename);
+
+                    Log::info("IF::HIT");
+
                     $finalRequest = new Request(array_merge($finalRequest->all(), [$key => $filename]));
+
                 } else {
+
+
+                    shell_exec("ffmpeg -i ". $request->file ." -vf fps=1 " . public_path('uploads/test'). "/out%d.png");
+
                     $filename = time() . '-' . $request->file($key)->getClientOriginalName();
                     $request->file($key)->move($uploadPath, $filename);
                     $finalRequest = new Request(array_merge($finalRequest->all(), [$key => $filename]));
+
+                    Log::info("ELSE::HIT");
+
                 }
             }
         }
 
+        Log::info("FILEUPLOADTRAIT::END");
+
+        Log::info($finalRequest);
+
         return $finalRequest;
     }
+
 }
