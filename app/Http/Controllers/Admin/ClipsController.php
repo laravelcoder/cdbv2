@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Clip;
 use App\Jobs\ConvertVideoForDownloading;
+use App\Jobs\CreateFileInfo;
+use App\Jobs\CreateFileInfoJob;
+use App\Jobs\GeneratePngsJob;
+use App\Jobs\MakeMP4;
+use App\Jobs\ProcessConvertToCaiJob;
+use App\Jobs\SendClipToRest;
 use App\Jobs\ConvertVideoForStreaming;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -11,13 +17,31 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreClipsRequest;
 use App\Http\Requests\Admin\UpdateClipsRequest;
 use App\Http\Controllers\Traits\FileUploadTrait;
-use FFMpeg\Coordinate\TimeCode;
+use App\Helpers\Helpers;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\File;
+use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Log;
+use Config;
+use Pbmedia\LaravelFFMpeg\FFMpegFacade as FFMpeg;
+use FFMpeg\FFProbe;
+use FFMpeg\Format\Video\X264;
+use FFMpeg\Coordinate\Dimension;
+use FFMpeg\Coordinate\Point;
+use FFMpeg\Media\Video;
+use FFMpeg\Coordinate\TimeCode;
+use FFMpeg\Coordinate\FrameRate;
+use FFMpeg\Filters\Video\ExtractMultipleFramesFilter;
+use FFMpeg\Format\VideoInterface;
+use FFMpeg\Filters\Video as Filters;
+
+use FFMpeg\Exception\InvalidArgumentException;
+use FFMpeg\Format\Audio\DefaultAudio;
+use FFMpeg\Format;
+use FFMpeg\Media\MediaTypeInterface;
+use FFMpeg\Format\ProgressListener\VideoProgressListener;
 
 class ClipsController extends Controller
 {
@@ -44,14 +68,35 @@ class ClipsController extends Controller
 
         }
 
-        // $videoimages = $clips->getMedia('videos');
+        // $images = [];
 
 
-//        $mediaItems = $clips->getMedia('images');
-
-
-        return view('admin.clips.index', compact('clips', 'videoimages'));
+        return view('admin.clips.index', compact('clips', 'videoimages', 'images'));
     }
+
+
+
+
+
+    public function list()
+    {
+        if (! Gate::allows('clip_access')) {
+            return abort(401);
+        }
+
+        if (request('show_deleted') == 1) {
+            if (! Gate::allows('clip_delete')) {
+                return abort(401);
+            }
+            $clips = Clip::onlyTrashed()->get();
+        } else {
+            $clips = Clip::all();
+
+        }
+
+        return view('admin.clips.list', compact('clips'));
+    }
+
 
     /**
      * Show the form for creating new Clip.
@@ -64,6 +109,9 @@ class ClipsController extends Controller
             return abort(401);
         }
 
+        // flash('Welcome Aboard!')->overlay();
+       // flash('Sorry! Please try again.')->error()->important();
+        //return view('admin.clips.editor');
         return view('admin.clips.create');
     }
 
@@ -79,9 +127,24 @@ class ClipsController extends Controller
             return abort(401);
         }
 
-        $request = $this->saveFiles($request);
+        // if(getenv('CUSTOMDEBUG') === 'ON') {
+        //     dd(getenv('CUSTOMDEBUG'));
+        // }
+
+        try{
+            $request = $this->saveFiles($request);
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+
+
+
 
         $clip = Clip::create($request->all());
+
+        Event::fire('clip.change');
 
 
         foreach ($request->input('videos_id', []) as $index => $id) {
@@ -89,6 +152,12 @@ class ClipsController extends Controller
             $file           = $model::find($id);
             $file->model_id = $clip->id;
             $file->save();
+
+//            MakeMP4::dispatch($clip);
+//            GeneratePngsJob::dispatch($clip);
+
+            // ConvertUploadToRightFormatJob::dispatch($clip);
+            // CreateFileInfoJob::dispatch($clip);
         }
 
         foreach ($request->input('images_id', []) as $index => $id) {
@@ -99,12 +168,9 @@ class ClipsController extends Controller
         }
 
 
-//        $this->dispatch(new ConvertVideoForDownloading($clip));
-//        $this->dispatch(new ConvertVideoForStreaming($clip));
-
-
         return redirect()->route('admin.clips.index');
     }
+
 
 
     /**
@@ -151,6 +217,7 @@ class ClipsController extends Controller
         $clip->updateMedia($media, 'videos');
 
         $media = [];
+
         foreach ($request->input('images_id', []) as $index => $id) {
             $model          = config('medialibrary.media_model');
             $file           = $model::find($id);
@@ -158,6 +225,7 @@ class ClipsController extends Controller
             $file->save();
             $media[] = $file->toArray();
         }
+
         $clip->updateMedia($media, 'images');
 
 
@@ -230,7 +298,9 @@ class ClipsController extends Controller
         if (! Gate::allows('clip_delete')) {
             return abort(401);
         }
+
         $clip = Clip::onlyTrashed()->findOrFail($id);
+
         $clip->restore();
 
         return redirect()->route('admin.clips.index');
@@ -252,4 +322,15 @@ class ClipsController extends Controller
 
         return redirect()->route('admin.clips.index');
     }
+
+
+  public function servercheck()
+    {
+        // if (! Gate::allows('clip_create')) {
+        //     return abort(401);
+        // }
+
+        return view('admin.clips.server_check');
+    }
+
 }

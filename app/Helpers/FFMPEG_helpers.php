@@ -40,4 +40,20 @@ class FFMPEG_helpers
             return false;
         }
     }
+
+    /**
+     * FFMPEG_helpers:: extractImages($video, $durationInSeconds, $n )
+     * @param $video
+     * @param $durationInSeconds
+     * @param $n
+     */
+    public static function extractImages($video, $durationInSeconds, $n ){
+
+        $interval = floor( $durationInSeconds / $n );
+        for($i = 0; $i < $n; $i++){
+            $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds( $i * $interval ));
+            //$frame->addMedia('/'. $clipid .'_out%d.png')->toMediaCollection('images');
+            $frame->save( public_path('uploads/test/'). 'pip-' . $i . '.jpg');
+        }
+    }
 }

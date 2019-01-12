@@ -25,7 +25,7 @@ class PathGeneratorController extends BasePathGenerator
         // \Log::error("SLUG:: " . $slug);
 
         // return  $slug .'/';
-        return $media->id.'/';
+        return str_slug($media->name, '_'). '/';
     }
 
     /**
@@ -52,5 +52,4 @@ class PathGeneratorController extends BasePathGenerator
         return $this->getPath($media) . 'responsive/';
     }
 }
-
 

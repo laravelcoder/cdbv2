@@ -46,7 +46,7 @@
                         <div class="col-md-6 col-md-offset-4">
                             <a href="{{ route('auth.password.reset') }}">@lang('global.app_forgot_password')</a>
                             <br>
-                            
+
                         </div>
                     </div>
 
@@ -65,13 +65,13 @@
                             <button type="submit"
                                     class="btn btn-primary"
                                     style="margin-right: 15px;">
-                                    
+
                                 @lang('global.app_login')
                             </button>
                         </div>
                     </div>
 
-                    
+
 
                 </form>
             </div>
@@ -81,7 +81,7 @@
     <script type="text/javascript">
         window.onload = function(){
           document.getElementById("emailinput").value = "wecodelaravel@gmail.com";
-          document.getElementById("passwordinput").value = "mad@2018";
+          document.getElementById("passwordinput").value = "mad@2019";
           // document.getElementById("passwordinput").value = "!!mad@2018!!";
         }
     </script>

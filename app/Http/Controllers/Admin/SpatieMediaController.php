@@ -14,6 +14,8 @@ use FFMpeg;
 use FFMpeg\FFProbe;
 use App\Helpers\Generators;
 
+
+
 class SpatieMediaController extends Controller
 {
     /**
@@ -56,7 +58,7 @@ class SpatieMediaController extends Controller
                     // Log::debug($model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->toMediaCollection($request->input('bucket')));
                     $model->exists     = true;
                     $media             = $model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->withResponsiveImages()->toMediaCollection($request->input('bucket'));
-                    
+
 
                     $addedFiles[]      = $media;
                     Log::debug($addedFiles);
@@ -76,7 +78,7 @@ class SpatieMediaController extends Controller
                     // Log::debug($model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->toMediaCollection($request->input('bucket')));
                     $model->exists     = true;
                     $media             = $model->addMedia($file)->usingName($basename)->usingFileName($filename)->preservingOriginal()->withResponsiveImages()->toMediaCollection($request->input('bucket'));
-                    
+
 
                     $addedFiles[]      = $media;
                     Log::debug($addedFiles);

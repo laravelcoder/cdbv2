@@ -1,0 +1,534 @@
+<!doctype html>
+<!--[if IE 6 ]><html lang="en-us" class="ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en-us" class="ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en-us" class="ie8"> <![endif]-->
+<!--[if (gt IE 7)|!(IE)]><!-->
+<html lang="en-us"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    
+    <title>Web Video editor - JS / PHP script GUI for FFmpeg (and Mencoder)</title>
+    
+    <meta name="description" content="Скрипт онлайн видеоредактора. Используется FFmpeg или Mencoder.">
+    <meta name="author" content="Andycoder">
+    <meta name="copyright" content="Andycoder">
+    <meta name="generator" content="Documenter v2.0 http://rxa.li/documenter">
+    <meta name="date" content="2014-09-29T00:00:00+02:00">
+    
+    <link rel="stylesheet" href="assets/css/documenter_style.css" media="all">
+    
+    <script src="assets/js/jquery.js"></script>
+    
+    <script src="assets/js/jquery.scrollTo.js"></script>
+    <script src="assets/js/jquery.easing.js"></script>
+    
+    <link rel="stylesheet" href="assets/js/google-code-prettify/prettify.css" media="screen">
+    <script src="assets/js/google-code-prettify/prettify.js"></script>
+    
+    <script>document.createElement('section');var duration='500',easing='swing';</script>
+    <script src="assets/js/script.js"></script>
+
+	<style>
+		html {
+			background-color: #FFFFFF;
+			color: #383838;
+		}
+
+		img {
+			max-width: 100%;
+			margin: 5px 0;
+			border: 1px solid #ddd;
+		}
+
+		::-moz-selection {
+			background: #444444;
+			color: #DDDDDD;
+		}
+
+		::selection {
+			background: #444444;
+			color: #DDDDDD;
+		}
+
+		#documenter_sidebar #documenter_logo {
+			background-image: url();
+		}
+
+		pre {
+			padding: 8px;
+			max-width: 100%;
+			overflow: auto;
+			background-color: #f7f7f9;
+			border: 1px solid #e1e1e8;
+		}
+
+		a {
+			color: #0000FF;
+		}
+
+		.btn {
+			border-radius: 3px;
+		}
+
+		.btn-primary {
+			background-image: -moz-linear-gradient(top, #0088CC, #0044CC);
+			background-image: -ms-linear-gradient(top, #0088CC, #0044CC);
+			background-image: -webkit-gradient(linear, 0 0, 0 0088 CC%, from(#DDDDDD), to(#0044CC));
+			background-image: -webkit-linear-gradient(top, #0088CC, #0044CC);
+			background-image: -o-linear-gradient(top, #0088CC, #0044CC);
+			background-image: linear-gradient(top, #0088CC, #0044CC);
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088CC', endColorstr='#0044CC', GradientType=0);
+			border-color: #0044CC #0044CC #bfbfbf;
+			color: #FFFFFF;
+		}
+
+		.btn-primary:hover,
+		.btn-primary:active,
+		.btn-primary.active,
+		.btn-primary.disabled,
+		.btn-primary[disabled] {
+			border-color: #0088CC #0088CC #bfbfbf;
+			background-color: #0044CC;
+		}
+
+		hr {
+			border-top: 1px solid #EBEBEB;
+			border-bottom: 1px solid #FFFFFF;
+		}
+
+		#documenter_sidebar, #documenter_sidebar ul a {
+			background-color: #DDDDDD;
+			color: #222222;
+		}
+
+		#documenter_sidebar ul a {
+			-webkit-text-shadow: 1px 1px 0px #EEEEEE;
+			-moz-text-shadow: 1px 1px 0px #EEEEEE;
+			text-shadow: 1px 1px 0px #EEEEEE;
+		}
+
+		#documenter_sidebar ul {
+			border-top: 1px solid #AAAAAA;
+		}
+
+		#documenter_sidebar ul a {
+			border-top: 1px solid #EEEEEE;
+			border-bottom: 1px solid #AAAAAA;
+			color: #444444;
+		}
+
+		#documenter_sidebar ul a:hover {
+			background: #444444;
+			color: #DDDDDD;
+			border-top: 1px solid #444444;
+		}
+
+		#documenter_sidebar ul a.current {
+			background: #444444;
+			color: #DDDDDD;
+			border-top: 1px solid #444444;
+		}
+
+		#documenter_copyright {
+			display: block !important;
+			visibility: visible !important;
+		}
+	</style>
+    
+</head>
+<body class="documenter-project-web-video-editor">
+    
+    <div id="documenter_sidebar">
+	
+	<a href="#documenter_cover" id="documenter_logo"></a>
+	
+	<ul id="documenter_nav">
+	    <li><a class="current" href="#documenter_cover">Start</a></li>
+	    <li><a href="#description" title="Description">Description</a></li>
+	    <li><a href="#features" title="Features">Features</a></li>
+	    <li><a href="#requirments" title="requirments">System requirements</a></li>
+	    <li><a href="#install" title="Install">Installation</a></li>
+	    <li><a href="#install_onserver" title="Install server applications">Installing server applications</a></li>
+	    <li><a href="#usage" title="Instructions for use">Instructions for use</a></li>
+		<li><a href="#security" title="Security notes">Security notes</a></li>
+	    <li><a href="#used" title="Used">Libraries</a></li>
+	</ul>
+	
+	<div id="documenter_copyright">
+	    Copyright Andycoder 2018<br>
+	    made with the <a href="http://rxa.li/documenter">Documenter v2.0</a> 
+	</div>
+	
+    </div>
+	
+    <div id="documenter_content">
+	
+	<section id="documenter_cover">
+	    <h1>Web Video Editor Mini</h1>
+	    <h2>PHP / JS application for video manipulation.</h2>
+	    <hr>
+	    <ul>
+			<li>Version: 1.2.1</li>
+			<li>Created: 04/22/2017</li>
+			<li>Last update: 10/04/2018</li>
+			<li>By: Andycoder</li>
+			<li><a href=""></a></li>
+			<li>Email: <a href="mailto:&#097;&#110;&#100;&#121;&#099;&#111;&#100;&#101;&#114;&#119;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#097;&#110;&#100;&#121;&#099;&#111;&#100;&#101;&#114;&#119;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a></li>
+	    </ul>
+	    <p></p>
+	</section>
+	
+	<section id="description">
+	    <div class="page-header"><h3>Description</h3><hr class="notop"></div>
+	    <p>
+			PHP / JS application for video manipulation.
+			Allows you to cut the video into pieces and combine them.
+			Convert video formats: MP4, WEBM, FLV, OGV.
+	    </p>
+	</section>
+	
+	<section id="features">
+	    <div class="page-header"><h3>Features and capabilities</h3><hr class="notop"></div>
+	    <ul>
+			<li>
+				For video manipulations are used server application
+				<a href="http://ffmpeg.org/" target="_blank">FFmpeg</a>.
+			</li>
+			<li>Ability to cut and combine pieces of video.</li>
+			<li>Convert video formats: MP4, WEBM, FLV, OGV.</li>
+			<li>Import and merge video, images, audio.</li>
+			<li>Ability to overlay text on video.</li>
+			<li>Ability to add background audio.</li>
+			<li>Showing the progress of processing.</li>
+			<li>Processing queue system for users.</li>
+			<li>Facebook authentication</li>
+			<li>Google authentication</li>
+			<li>Registration, authorization, password recovery.</li>
+			<li>HTML5 video player.</li>
+			<li>Upload video 3 ways: file, from YouTube, by URL.</li>
+			<li>Cut fast - cut the fragment without re-encoding.</li>
+			<li>Simple files database.</li>
+			<li>Simple configuration (in file).</li>
+			<li>Ability to translate interface. Ready translation files for English and Russian.</li>
+			<li>Nice interface and adaptive layout (Bootstrap 4).</li>
+			<li>Open and clean source code.</li>
+	    </ul>
+	</section>
+	
+	<section id="requirments">
+	    <div class="page-header"><h3>System requirements</h3><hr class="notop"></div>
+	    <ul>
+			<li>Linux server (other is not tested)</li>
+			<li>PHP 5.3+ (including 7.0+)</li>
+			<li>Web server Apache or Nginx</li>
+			<li>FFmpeg 2.8+</li>
+			<li>Availability of Cron</li>
+	    </ul>
+	</section>
+	
+	<section id="install">
+	    
+	    <div class="page-header"><h3>Installation</h3><hr class="notop"></div>
+	    <ol>
+			<li>Install server software (instructions <a href="#install_onserver">below</a>).</li>
+			<li>Create web server configuration (instructions <a href="#install_webserver">below</a>).</li>
+			<li>Upload content of the archive <b>upload</b> folder to the server.</li>
+			<li>Set permissions <b>777</b> for folders: <b>/database/</b>, <b>/public/userfiles/</b> and all nested.</li>
+			<li>
+				Open in a text editor the file <b>/config/config.php</b> and configure (the file has comments).
+				<br>
+				Configure Facebook authentication (instructions <a href="#install_facebook">below</a>).
+				<br>
+				Please do not forget to enter your email in the parameter "$config['admin_auth_email']". After you register a user with such an email, he will have administrator rights.
+			</li>
+			<li>
+				Create task for Cron for queue processing.
+				<br>
+				Cron task (once per 1 minute):
+				<br>
+				<pre>*/1 * * * * php -f /var/www/mysite.com/cron.php queue > /dev/null</pre>
+
+				<p>
+					On the dedicated server or VDS you need in the terminal run the command:
+				</p>
+				<pre>sudo crontab -e</pre>
+				<p>Add new string.</p>
+
+			</li>
+			<li>Open in your browser the address of the site or folder where you have installed the app.</li>
+			<li>Finish.</li>
+	    </ol>
+
+		<a name="install_facebook" id="install_facebook"></a>
+	    <h5>Facebook authentication</h5>
+	    
+	    <ol>
+			<li>
+				Open page <a href="https://developers.facebook.com/apps/">Menage Apps</a>.
+				If you are not registered as developer, you need to register (click button "Register Now").
+			</li>
+			<li>
+				Click button "Create a New App", set Application name and save.
+				<br>
+				<a href="assets/img/img001.png" target="_blank">
+					<img src="assets/img/img001.png" style="width: 400px;">
+				</a>
+			</li>
+			<li>
+				On the page "Add Product" in line "Facebook Login" click button "Get Started".
+				<br>
+				Choose option "Web".
+				<br>
+				Set "Site URL" and save.
+				<br>
+				<a href="assets/img/img002.png" target="_blank">
+					<img src="assets/img/img002.png" style="width: 400px;">
+				</a>
+			</li>
+			<li>
+				On the product settings page enter redirect URL in field "Valid OAuth redirect URIs".
+				<br>
+				Example: <b>http://[YOUR SITE ADDRESS]/index.php?action=auth</b>
+				<br>
+				<a href="assets/img/img003.png" target="_blank">
+					<img src="assets/img/img003.png" style="width: 400px;">
+				</a>
+			</li>
+			<li>
+				Go to Dashboard page.
+				<br>
+				<a href="assets/img/img004.png" target="_blank">
+					<img src="assets/img/img004.png" style="width: 400px;">
+				</a>
+				<br>
+				Copy App ID and paste to value of <b>$config['facebook_app_id']</b> in /config/config.php.
+				<br>
+				Copy App Secret and paste to value of <b>$config['facebook_secret_key']</b> in /config/config.php.
+				<br>
+				Set your Admin email to value of <b>$config['admin_auth_email']</b>.
+			</li>
+	    </ol>
+
+		<a name="install_google"></a>
+		<h5>Google authentication</h5>
+
+		<ol>
+			<li>
+				Open <a href="https://console.developers.google.com/" target="_blank">Google API Console</a> and create new project.
+				<br>
+				<a href="assets/img/img006.png" target="_blank">
+					<img src="assets/img/img006.png" style="width: 400px;">
+				</a>
+				<br>
+				<a href="assets/img/img006-2.png" target="_blank">
+					<img src="assets/img/img006-2.png" style="width: 400px;">
+				</a>
+			</li>
+			<li>
+				Go to page <b>Credentials</b>, click the button "Create credentials" and select "OAuth cliend ID". Set Application type - Web application.
+				<br>
+				<a href="assets/img/img007.png" target="_blank">
+					<img src="assets/img/img007.png" style="width: 400px;">
+				</a>
+				<br>
+				Fill in all the fields. Set "Authorised redirect URIs" - <b>http://[YOUR SITE ADDRESS]/index.php?action=auth&type=google</b>.
+				<br>
+				<a href="assets/img/img008.png" target="_blank">
+					<img src="assets/img/img008.png" style="width: 400px;">
+				</a>
+			</li>
+			<li>
+				Copy <b>Client ID</b> and paste to value of <b>$config['google_client_id']</b> in /config/config.php.
+				<br>
+				Set your <b>Client secret</b> to value of <b>$config['google_secret_key']</b>.
+			</li>
+			<li>
+				Go to the "OAuth consent screen" tab and fill in all fields in accordance with the description.
+				<br>
+				Also you need to confirm domain ownership on tab "Domain verification".
+			</li>
+		</ol>
+
+		<a name="install_webserver" id="install_webserver"></a>
+		<h5>Configure web server (Apache or Nginx)</h5>
+
+		<p>
+			As the root directory for your web site, you need to specify the folder <b>/public/</b>.
+		</p>
+
+		<p>
+			Example configuration for Nginx:
+		</p>
+
+		<pre>server {
+    listen 80;
+
+    server_name your-site.com www.your-site.com;
+
+    charset utf-8;
+    client_max_body_size 500m;
+    client_body_buffer_size 128k;
+    client_header_timeout 240;
+    client_body_timeout 240;
+    fastcgi_read_timeout 240;
+    index index.php;
+    root /var/www/your-site.com/public;
+
+    error_log /var/log/nginx/your-site.com_error.log;
+    access_log /var/log/nginx/your-site.com_access.log;
+
+    location / {
+        root /var/www/your-site.com/public;
+        index index.php;
+    }
+
+    location ~* \.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
+        access_log off;
+        expires max;
+        log_not_found off;
+        root /var/www/your-site.com/public;
+    }
+
+    location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+    }
+
+    # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include /etc/nginx/fastcgi.conf;
+    }
+
+}</pre>
+
+		<p>
+			Example for Apache:
+		</p>
+
+		<pre>Listen 80
+&lt;VirtualHost *:80&gt;
+    DocumentRoot "/var/www/your-site.com/public"
+    ServerName your-site.com
+
+    # Other directives here
+&lt;/VirtualHost&gt;</pre>
+
+		<p>
+			You can install the app to the folder of the domain. For this you need to edit the path in the application configuration.
+		</p>
+	    
+	</section>
+
+		<a name="install_onserver"></a>
+	<section id="install_onserver">
+	    <div class="page-header"><h3>Installing server applications</h3><hr class="notop"></div>
+	    
+	    <h4>Installing FFmpeg on Linux</h4>
+	    
+	    <p>
+		Developer website: <a href="http://ffmpeg.org/" target="_blank">http://ffmpeg.org/</a>
+	    </p>
+	    
+	    <p>
+		Install FFmpeg recommended by this manual:
+		<a href="https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu" target="_blank">https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu</a>
+		<br />
+		Need to install any additional applications that are listed in this manual.
+	    </p>
+	    <p>
+		<b>Attention!</b>
+		<br />
+		It is strongly recommended to install all applications in a folder <b>/usr/bin/</b> and <b>/usr/ffmpeg_build/</b>.
+		<br />
+		To do this in the instructions you need to replace all "$HOME" to "/usr". For install open command line (terminal).
+		<br />
+		<b>Example:</b>
+	    </p>
+	    
+	    <pre>
+mkdir ~/ffmpeg_sources
+cd ~/ffmpeg_sources
+wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+tar xjvf ffmpeg-snapshot.tar.bz2
+cd ffmpeg
+PATH="$PATH:/usr/bin" PKG_CONFIG_PATH="/usr/ffmpeg_build/lib/pkgconfig" ./configure \
+  --prefix="/usr/ffmpeg_build" \
+  --extra-cflags="-I/usr/ffmpeg_build/include" \
+  --extra-ldflags="-L/usr/ffmpeg_build/lib" \
+  --bindir="/usr/bin" \
+  --enable-gpl \
+  --enable-libass \
+  --enable-libfdk-aac \
+  --enable-libfreetype \
+  --enable-libmp3lame \
+  --enable-libopus \
+  --enable-libtheora \
+  --enable-libvorbis \
+  --enable-libvpx \
+  --enable-libx264 \
+  --enable-nonfree \
+  --enable-x11grab
+PATH="$PATH:/usr/bin" make
+sudo make install
+make distclean
+hash -r
+</pre>
+	    
+	    
+	</section>
+	
+	<section id="usage">
+	    <div class="page-header"><h3>Instructions for use</h3><hr class="notop"></div>
+
+		<p>
+			The application has a simple intuitive interface.
+		</p>
+	    
+	    <p>
+
+			<a href="assets/img/img005.png" target="_blank">
+				<img src="assets/img/img005.png">
+			</a>
+		</p>
+	    
+	</section>
+
+	<section id="security">
+		<div class="page-header"><h3>Security notes</h3><hr class="notop"></div>
+
+		<p>
+			Attention! This is a simplified application and uses files for the database.
+			<br>
+			The folder "database" should not be available for viewing by HTTP. This folder should be outside the root folder of the site.
+			<br>
+			See configuration examples for Nginx and Apache above.
+		</p>
+
+	</section>
+	
+	<section id="used">
+	    <div class="page-header"><h3>Libraries</h3><hr class="notop"></div>
+	    
+	    <ul>
+			<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>
+			<li><a href="http://jqueryui.com/" target="_blank">jQuery UI</a></li>
+			<li><a href="https://v4-alpha.getbootstrap.com/" target="_blank">Bootstrap 4</a></li>
+			<li><a href="http://underscorejs.org/" target="_blank">Underscore.js</a></li>
+	    </ul>
+	    
+	</section>
+	
+    </div>
+</body>
+</html>

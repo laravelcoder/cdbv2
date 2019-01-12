@@ -34,7 +34,11 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    // config('services.dishrest.key')
+    'dishrest' => [
+        'key' => env('DISHREST_KEY')
+    ]
 
-    
+
 
 ];

@@ -46,6 +46,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root'   => storage_path('app'),
+
         ],
 
         'media' => [
@@ -112,15 +113,15 @@ return [
 
         'streamable_videos' => [
             'driver' => 'local',
-            'root'   => public_path('uploads/clips'),
-            'url'        => env('APP_URL') . '/uploads/clips',
+            'root'   => public_path('uploads/clips/feed'),
+            'url'        => env('APP_URL') . '/uploads/clips/feed',
             'visibility' => 'public',
         ],
 
         'downloadable_videos' => [
             'driver' => 'local',
-            'root'   => public_path('uploads/clips'),
-            'url'        => env('APP_URL') . '/uploads/clips',
+            'root'   => public_path('uploads/clips/down'),
+            'url'        => env('APP_URL') . '/uploads/clips/down',
             'visibility' => 'public',
         ],
 
@@ -133,8 +134,17 @@ return [
 
         'videos' => [
             'driver' => 'local',
-            'root'   => public_path('uploads/clips'),
-            'url'        => env('APP_URL') . '/uploads/clips',
+            'root'   => storage_path('app'),
+            'url'    => env('APP_URL') . '/media',
+
+            'visibility' => 'public',
+        ],
+
+        'converted' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/public'),
+            'url'    => env('APP_URL') . '/converted/',
+
             'visibility' => 'public',
         ],
 

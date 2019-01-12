@@ -4,6 +4,7 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Laravel\Passport\HasApiTokens;
 use Hash;
 
 /**
@@ -17,12 +18,13 @@ use Hash;
 */
 class User extends Authenticatable
 {
-    use Notifiable;
+
+    use HasApiTokens, Notifiable;
     protected $fillable = ['name', 'email', 'password', 'remember_token'];
     protected $hidden = ['password', 'remember_token'];
-    
-    
-    
+
+
+
     /**
      * Hash password
      * @param $input
@@ -32,20 +34,30 @@ class User extends Authenticatable
         if ($input)
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
     }
-    
-    
+
+
     public function role()
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
-    
+
     public function registerMediaCollections()
     {
         $this->addMediaCollection('avatar')->singleFile();
     }
-    
+
     public function sendPasswordResetNotification($token)
     {
        $this->notify(new ResetPassword($token));
     }
+
+
+    // public function generateToken()
+    // {
+    //     $this->api_token = str_random(60);
+    //     $this->save();
+
+    //     return $this->api_token;
+    // }
+
 }

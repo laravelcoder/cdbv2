@@ -7,7 +7,10 @@
     window.printButtonTrans = '{{ trans("global.app_print") }}';
     window.colvisButtonTrans = '{{ trans("global.app_colvis") }}';
 </script>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+{{-- <script src="//code.jquery.com/jquery-1.11.3.min.js"></script> --}}
 <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
 <script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
@@ -18,11 +21,13 @@
 <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.0/js/dataTables.select.min.js"></script>
-<script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+{{-- <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script> --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 {{-- <script src="{{ url('adminlte/js') }}/bootstrap.min.js"></script> --}}
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" integrity="sha384-pjaaA8dDz/5BgdFUPX6M/9SUZv4d12SUPF0axWc+VRZkx5xU3daN+lYb49+Ax+Tl" crossorigin="anonymous"></script>
-<script src="{{ url('adminlte/js') }}/select2.full.min.js"></script>
-<script src="{{ url('adminlte/js') }}/main.js"></script>
+
+<script src="{{ url('adminlte/js/select2.full.min.js') }}"></script>
+<script src="{{ url('adminlte/js/main.js') }}"></script>
 
 <script src="{{ url('adminlte/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ url('adminlte/plugins/fastclick/fastclick.js') }}"></script>
@@ -39,6 +44,9 @@
 
 
 
+</script>
+<script>
+    $('#flash-overlay-modal').modal();
 </script>
 
 <script>

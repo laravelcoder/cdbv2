@@ -8,7 +8,7 @@
         <div class="panel-heading">
             @lang('global.app_create')
         </div>
-        
+
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-12 form-group">
@@ -64,12 +64,30 @@
                     @endif
                 </div>
             </div>
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
     </div>
 
     {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
+{{--
+<passport-clients></passport-clients>
+<passport-authorized-clients></passport-authorized-clients>
+<passport-personal-access-tokens></passport-personal-access-tokens> --}}
 @stop
 
 @section('javascript')

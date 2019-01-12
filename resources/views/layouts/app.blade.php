@@ -24,7 +24,10 @@
             @endif
 
             <div class="row">
+
+
                 <div class="col-md-12">
+                     @include('flash::message')
 
                     @if (Session::has('message'))
                         <div class="alert alert-info">
@@ -41,6 +44,8 @@
                         </div>
                     @endif
 
+
+
                     @yield('content')
 
                 </div>
@@ -52,6 +57,11 @@
 {!! Form::open(['route' => 'auth.logout', 'style' => 'display:none;', 'id' => 'logout']) !!}
 <button type="submit">Logout</button>
 {!! Form::close() !!}
+
+
+<script>
+ window.myVar = '{{ env('CUSTOMDEBUG') }}';
+</script>
 
 @include('partials.javascripts')
 </body>

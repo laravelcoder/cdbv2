@@ -45,7 +45,7 @@
         @if (count($clips) > 0)
             @foreach ($clips as $clip)
                 @foreach($clip->getMedia('videos') as $media)
-                    <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="col-lg-3 col-md-4 col-sm-12">
 
 
 
@@ -82,36 +82,34 @@
                                 <span>File Size: {{ $media->human_readable_size }}</span> <br>
                                 <span>Filename: {{ $media->filename }}</span> <br>
                             </div>
-                            <small>from upload</small>
-                            <div class="d-flex flex-wrap">
-                                @foreach($clip->getMedia('images')->slice(0, 3) as $media)
-                                <span class="p-2 flex-fill bd-highlight">
-                                    <a href="{{ $media->getUrl() }}" target="_blank">
-                                        <img class=" " src="{{ $media->getUrl() }}"  title="SIZE {{ $media->size }} KB" width="80" height="35">
-                                    </a>
-                                </span>
-                                @endforeach
-                            </div>
-@php
+                            {{--<small>from upload</small>--}}
+                            {{--<hr>--}}
+                            {{--<div class="d-flex flex-wrap">--}}
+                                {{--@foreach($clip->getMedia('images')->slice(0, 15) as $media)--}}
+                                {{--<span class="p-2 flex-fill bd-highlight">--}}
+                                    {{--<a href="{{ $media->getUrl() }}" target="_blank">--}}
+                                        {{--<img class=" " src="{{ $media->getUrl() }}"  title="SIZE {{ $media->size }} KB" width="80" height="35">--}}
+                                    {{--</a>--}}
+                                {{--</span>--}}
+                                {{--@endforeach--}}
+                            {{--</div>--}}
+                        @php
 
-$mediaItems = $clip->getMedia('videos');
-$mediaItems[0]->getUrl('screenshot-5sec');
-$mediaItems[0]->getPath('screenshot-5sec');
-// $mediaItems[0]->getTemporaryUrl(Carbon::now()->addMinutes(5), 'screenshot-5sec');
+                            $pngs = Storage::disk('clips')->files($media->id . '/pngs/');
 
-$urlToFirstListImage = $clip->getFirstMediaUrl('videos', 'screenshot-5sec');
-// $urlToFirstTemporaryListImage = $clip->getFirstTemporaryUrl(Carbon::now()->addMinutes(5), 'images', 'screenshot-5sec');
-$fullPathToFirstListImage = $clip->getFirstMediaPath('videos', 'screenshot-5sec');
-// dd($urlToFirstListImage);
-@endphp
+                        @endphp
+                            <hr>
                             <small>from video</small>
+                            <hr>
                             <div class="d-flex flex-wrap">
-                                @foreach($clip->getMedia('videos')->slice(0, 3) as $screenshot)
-
-                                <span class="p-2 flex-fill bd-highlight">
-                                    <img src="{{ $urlToFirstListImage }}" alt="" width="80" height="35">
-
-                                </span>
+                                @foreach($pngs as $png)
+                                        @if($loop->index < 10)
+                                        <span class="p-2 flex-fill bd-highlight">
+                                            <a href="{{url('/uploads/clips/')}}/{{ $png }}" target="_blank">
+                                                <img src="{{url('/uploads/clips/')}}/{{ $png }}" alt="" width="80" height="35">
+                                            </a>
+                                        </span>
+                                        @endif
                                 @endforeach
                             </div>
 

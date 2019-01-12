@@ -1,0 +1,16 @@
+
+CHANGELOG
+
+1.2.0
+- Added registration, authorization, password recovery.
+- Added function "Cut fast".
+
+1.1.0
+
+- Added Google authentication.
+- Improved pagination in Users list (Admin area).
+- Get frame image improvements.
+
+1.0.0
+
+- The first release.

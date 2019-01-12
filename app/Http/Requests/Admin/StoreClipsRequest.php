@@ -22,7 +22,9 @@ class StoreClipsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-        ];
-    }
+    return [
+        //'title' => 'required',
+            //'videos' => 'required|file|mimetypes:video/mp4,video/mpeg,video/x-matroska',
+    ];
+}
 }

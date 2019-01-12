@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Role;
 use App\User;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,7 +30,9 @@ class AuthServiceProvider extends ServiceProvider
 
         $user = \Auth::user();
 
-        
+        Passport::routes();
+
+
         if (! app()->runningInConsole()) {
             $roles = Role::with('permission')->get();
 

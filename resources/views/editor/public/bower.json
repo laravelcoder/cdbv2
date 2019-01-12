@@ -1,0 +1,20 @@
+{
+  "name": "vedit",
+  "version": "0.1",
+  "authors": [
+    "andchir <andchir@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "Commercial",
+  "homepage": "",
+  "dependencies": {
+    "jquery": ">=3.2.0",
+    "bootstrap": "v4.0.0-alpha.6",
+    "jquery-ui": "^1.12.1",
+    "underscore": "^1.8.3"
+  },
+  "keywords": [
+    "video",
+    "editor"
+  ]
+}

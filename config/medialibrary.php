@@ -8,7 +8,7 @@ return [
      * The disk on which to store added files and derived images by default. Choose
      * one or more of the disks you've configured in config/filesystems.php.
      */
-    'disk_name' => 'media',
+    'disk_name' => 'local',
 
     /*
      * The maximum file size of an item in bytes.
@@ -81,7 +81,7 @@ return [
     /*
      * The class that contains the strategy for determining a media file's path.
      */
-    'path_generator' => PathGeneratorController::class,
+   'path_generator' => PathGeneratorController::class,
 
     /*
      * Medialibrary will try to optimize all converted images by removing
@@ -127,7 +127,8 @@ return [
      */
     'image_driver' => 'gd',
 
-    'audio_codec'  => 'libvo_aacenc',
+    // 'audio_codec'  => 'libvo_aacenc',
+     'audio_codec'  => 'aac',
 
     /*
      * FFMPEG & FFProbe binaries paths, only used if you try to generate video

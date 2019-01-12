@@ -2,10 +2,17 @@
 
 namespace App\Providers;
 
+use App\Events\FileInfoCreatedEvent;
+use App\Listeners\ConvertToCaiListener;
+use App\Listeners\GeneratePngsListener;
+use App\Listeners\MediaLogger;
+use App\Listeners\DispatchStatusOfFileInfoCreated;
+use App\Listeners\FileInfoCreateListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -16,17 +23,25 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            SendEmailVerificationNotification::class,
+//            SendEmailVerificationNotification::class,
         ],
         'Spatie\MediaLibrary\Events\MediaHasBeenAdded' => [
-            'App\Listeners\MediaLogger',
-//            'App\Listeners\MediaVideoConverterListener',
+            MediaLogger::class,
+//            GeneratePngsListener::class,
+            // FileInfoCreateListener::class,
+            // MediaVideoConverterListener::class,
 
         ],
         'Spatie\MediaLibrary\Events\ConversionHasBeenCompleted' => [
             'App\Listeners\ConversionLogger',
-            'App\Listeners\ConvertToCaiConversionListener'
+
         ],
+//        FileInfoCreatedEvent::class => [
+//           // DispatchStatusOfFileInfoCreated::class
+//        ],
+        // ClipConverted::class => [
+
+        // ],
 
     ];
 
@@ -39,6 +54,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
     }
 }
+
