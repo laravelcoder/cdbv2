@@ -71,7 +71,7 @@ class ClipsController extends Controller
         // $images = [];
 
 
-        return view('admin.clips.index', compact('clips', 'videoimages', 'images'));
+        return view('admin.clips.index', compact('clips'));
     }
 
 

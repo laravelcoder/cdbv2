@@ -53,7 +53,7 @@
                 <div class="box-header with-border">
                   <h4 class="box-title" style="width:100%;">
                           <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $media->id }}">
-                             {{ str_limit($media->name , $limit = 30, $end = '...') }}
+                             {{ str_limit($media->name , $limit = 30, $end = '...') }} {{ $clip->title }}
                            </a>
                            @can('clip_edit') <a href="{{ route('admin.clips.edit',[$clip->id]) }}" class="btn btn-xs btn-info btn-flat btn-sm pull-right">@lang('global.app_edit')</a> @endcan
                   </h4>
