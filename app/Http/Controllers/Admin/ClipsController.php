@@ -110,7 +110,7 @@ class ClipsController extends Controller
         }
 
         // flash('Welcome Aboard!')->overlay();
-       // flash('Sorry! Please try again.')->error()->important();
+        // flash('Sorry! Please try again.')->error()->important();
         //return view('admin.clips.editor');
         return view('admin.clips.create');
     }
@@ -144,20 +144,20 @@ class ClipsController extends Controller
 
         $clip = Clip::create($request->all());
 
-        Event::fire('clip.change');
+        // Event::fire('clip.change');
 
 
-        foreach ($request->input('videos_id', []) as $index => $id) {
+        foreach ($request->input('videos', []) as $index => $id) {
             $model          = config('medialibrary.media_model');
             $file           = $model::find($id);
             $file->model_id = $clip->id;
             $file->save();
 
-//            MakeMP4::dispatch($clip);
-//            GeneratePngsJob::dispatch($clip);
+            // MakeMP4::dispatch($clip);
+          // GeneratePngsJob::dispatch($clip);
 
             // ConvertUploadToRightFormatJob::dispatch($clip);
-            // CreateFileInfoJob::dispatch($clip);
+           // CreateFileInfoJob::dispatch($clip);
         }
 
         foreach ($request->input('images_id', []) as $index => $id) {
